@@ -1,0 +1,20 @@
+<div class="container">
+  <h2>{{ isEdit ? 'Edit' : 'Add' }} Product</h2>
+  <form (ngSubmit)="onSubmit()" #form="ngForm">
+    <label>Name:</label>
+    <input type="text" [(ngModel)]="product.name" name="name" required />
+    <br /><br />
+
+    <label>Description:</label>
+    <input type="text" [(ngModel)]="product.description" name="description" required />
+    <br /><br />
+
+    <label>Price:</label>
+    <input type="number" [(ngModel)]="product.price" name="price" required />
+    <br /><br />
+
+    <button type="submit">{{ isEdit ? 'Update' : 'Save' }}</button>
+    <button type="button" (click)="router.navigate(['/'])">Cancel</button>
+  </form>
+</div>
+<p>productform works!</p>

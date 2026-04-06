@@ -1,0 +1,23 @@
+<div class="container">
+  <h2>Product List</h2>
+  <button routerLink="/add">➕ Add Product</button>
+  <table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+      <tr>
+        <th>ID</th><th>Name</th><th>Description</th><th>Price</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of products">
+        <td>{{ p.id }}</td>
+        <td>{{ p.name }}</td>
+        <td>{{ p.description }}</td>
+        <td>{{ p.price }}</td>
+        <td>
+          <button (click)="editProduct(p.id!)">✏️ Edit</button>
+          <button (click)="deleteProduct(p.id!)">🗑 Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
