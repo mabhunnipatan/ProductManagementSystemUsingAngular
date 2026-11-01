@@ -20,10 +20,10 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('product-frontend1');
   });
 
-  it('should render title', () => {
+  it('should render the Stockroom brand', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, product-frontend1');
+    expect(compiled.querySelector('.brand-name')?.textContent).toContain('stockroom');
   });
 });

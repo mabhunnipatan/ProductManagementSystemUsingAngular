@@ -1,23 +1,59 @@
-<div class="container">
-  <h2>Product List</h2>
-  <button routerLink="/add">➕ Add Product</button>
-  <table border="1" cellpadding="8" cellspacing="0">
-    <thead>
-      <tr>
-        <th>ID</th><th>Name</th><th>Description</th><th>Price</th><th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let p of products">
-        <td>{{ p.id }}</td>
-        <td>{{ p.name }}</td>
-        <td>{{ p.description }}</td>
-        <td>{{ p.price }}</td>
-        <td>
-          <button (click)="editProduct(p.id!)">✏️ Edit</button>
-          <button (click)="deleteProduct(p.id!)">🗑 Delete</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+<section class="page-heading">
+  <div>
+    <p class="eyebrow">YOUR CATALOG</p>
+    <h1>Products</h1>
+    <p class="page-description">Keep your inventory organized and up to date.</p>
+  </div>
+  <a class="button button-primary" routerLink="/add">
+    <span class="button-icon" aria-hidden="true">+</span>
+    Add product
+  </a>
+</section>
+
+<section class="surface catalog-card" aria-labelledby="catalog-title">
+  <div class="surface-heading">
+    <div>
+      <h2 id="catalog-title">Product list</h2>
+      <p class="surface-subtitle">A clear view of everything in your catalog.</p>
+    </div>
+    <span class="item-count">{{ products.length }} {{ products.length === 1 ? 'item' : 'items' }}</span>
+  </div>
+
+  <div class="empty-state" *ngIf="products.length === 0">
+    <span class="empty-icon" aria-hidden="true">▤</span>
+    <h3>Your catalog is ready</h3>
+    <p>Add your first product to start building your inventory.</p>
+    <a class="button button-secondary" routerLink="/add">Create a product</a>
+  </div>
+
+  <div class="table-wrap" *ngIf="products.length > 0">
+    <table class="product-table">
+      <thead>
+        <tr>
+          <th scope="col">Product</th>
+          <th scope="col">Description</th>
+          <th scope="col">Price</th>
+          <th scope="col" class="actions-heading">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of products">
+          <td>
+            <div class="product-name">
+              <span class="product-avatar" aria-hidden="true">{{ p.name.charAt(0) || 'P' }}</span>
+              <span>{{ p.name }}</span>
+            </div>
+          </td>
+          <td class="description-cell">{{ p.description }}</td>
+          <td class="price-cell">{{ p.price | currency }}</td>
+          <td class="actions-cell">
+            <button class="button button-quiet" type="button" (click)="editProduct(p.id!)">Edit</button>
+            <button class="button button-danger" type="button" (click)="deleteProduct(p.id!)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<p class="catalog-footnote">Changes to your catalog are saved automatically.</p>

@@ -1,20 +1,69 @@
-<div class="container">
-  <h2>{{ isEdit ? 'Edit' : 'Add' }} Product</h2>
-  <form (ngSubmit)="onSubmit()" #form="ngForm">
-    <label>Name:</label>
-    <input type="text" [(ngModel)]="product.name" name="name" required />
-    <br /><br />
+<section class="page-heading">
+  <div>
+    <p class="eyebrow">{{ isEdit ? 'CATALOG UPDATE' : 'GROW YOUR CATALOG' }}</p>
+    <h1>{{ isEdit ? 'Edit product' : 'Add a product' }}</h1>
+    <p class="page-description">
+      {{ isEdit ? 'Make changes to your product details.' : 'Add the details below to create a new catalog item.' }}
+    </p>
+  </div>
+</section>
 
-    <label>Description:</label>
-    <input type="text" [(ngModel)]="product.description" name="description" required />
-    <br /><br />
+<section class="surface form-card">
+  <div class="surface-heading">
+    <div>
+      <h2>Product details</h2>
+      <p class="surface-subtitle">Fields marked with an asterisk are required.</p>
+    </div>
+    <span class="form-step">01 <span>/ 01</span></span>
+  </div>
 
-    <label>Price:</label>
-    <input type="number" [(ngModel)]="product.price" name="price" required />
-    <br /><br />
+  <form class="product-form" (ngSubmit)="onSubmit()" #form="ngForm">
+    <div class="form-field">
+      <label for="product-name">Product name <span aria-hidden="true">*</span></label>
+      <input
+        id="product-name"
+        type="text"
+        [(ngModel)]="product.name"
+        name="name"
+        placeholder="e.g. Studio headphones"
+        required
+      />
+    </div>
 
-    <button type="submit">{{ isEdit ? 'Update' : 'Save' }}</button>
-    <button type="button" (click)="router.navigate(['/'])">Cancel</button>
+    <div class="form-field">
+      <label for="product-description">Description <span aria-hidden="true">*</span></label>
+      <textarea
+        id="product-description"
+        [(ngModel)]="product.description"
+        name="description"
+        placeholder="Add a short description of this product"
+        rows="4"
+        required
+      ></textarea>
+    </div>
+
+    <div class="form-field price-field">
+      <label for="product-price">Price <span aria-hidden="true">*</span></label>
+      <div class="price-input">
+        <span aria-hidden="true">$</span>
+        <input
+          id="product-price"
+          type="number"
+          [(ngModel)]="product.price"
+          name="price"
+          placeholder="0.00"
+          min="0"
+          step="0.01"
+          required
+        />
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <a class="button button-secondary" routerLink="/">Cancel</a>
+      <button class="button button-primary" type="submit" [disabled]="form.invalid">
+        {{ isEdit ? 'Save changes' : 'Create product' }}
+      </button>
+    </div>
   </form>
-</div>
-<p>productform works!</p>
+</section>
