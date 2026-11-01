@@ -21,6 +21,7 @@ The backend currently uses an in-memory H2 database. Products and user accounts 
 - Angular 19 server-side rendering and Spring Boot REST API
 
 The product finder uses local matching logic; it does not call an external AI service or require an AI API key.
+On first startup with an empty database, the backend adds eight sample products across several categories so the storefront is ready to explore. Admins can edit or remove these sample listings.
 
 ## Technology
 
