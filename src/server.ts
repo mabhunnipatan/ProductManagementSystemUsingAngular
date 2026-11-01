@@ -13,6 +13,16 @@ const browserDistFolder = resolve(serverDistFolder, '../browser');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
+const apiUrl = process.env['API_URL'] ?? 'http://localhost:8080/api/products';
+
+globalThis.__PRODUCT_API_URL__ = apiUrl;
+
+app.get('/runtime-config.js', (_req, res) => {
+  res
+    .type('application/javascript')
+    .set('Cache-Control', 'no-store')
+    .send(`globalThis.__PRODUCT_API_URL__ = ${JSON.stringify(apiUrl)};`);
+});
 
 /**
  * Example Express Rest API endpoints can be defined here.

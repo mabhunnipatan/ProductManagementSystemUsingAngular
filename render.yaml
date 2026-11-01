@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: product-api
+    runtime: docker
+    dockerfilePath: ./springbootwithangular/Dockerfile
+    dockerContext: ./springbootwithangular
+    healthCheckPath: /api/products
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+
+  - type: web
+    name: product-frontend1
+    runtime: node
+    buildCommand: npm ci && npm run build
+    startCommand: npm run serve:ssr:product-frontend1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 22.14.0
+      - key: API_URL
+        sync: false

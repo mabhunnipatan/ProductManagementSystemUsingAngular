@@ -3,11 +3,16 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Product } from '../models/product';
 
+declare global {
+  var __PRODUCT_API_URL__: string | undefined;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'http://localhost:8080/api/products'; // Spring Boot backend
+  private readonly apiUrl =
+    globalThis.__PRODUCT_API_URL__ ?? 'http://localhost:8080/api/products';
 
   constructor(private http: HttpClient) {}
 
