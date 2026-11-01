@@ -20,6 +20,12 @@ export class ProductService {
     return this.http.get<Product[]>(this.apiUrl);
   }
 
+  getRecommendations(query: string): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.apiUrl}/recommendations`, {
+      params: { query }
+    });
+  }
+
   getById(id: number): Observable<Product> {
     return this.http.get<Product>(`${this.apiUrl}/${id}`);
   }

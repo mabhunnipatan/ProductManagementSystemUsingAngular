@@ -1,18 +1,24 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 
-import { ProductformComponent } from './productform.component';
+import { ProductFormComponent } from './productform.component';
+import { ProductService } from '../../services/productservice.service';
 
 describe('ProductformComponent', () => {
-  let component: ProductformComponent;
-  let fixture: ComponentFixture<ProductformComponent>;
+  let component: ProductFormComponent;
+  let fixture: ComponentFixture<ProductFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ProductformComponent]
+      imports: [ProductFormComponent],
+      providers: [
+        provideRouter([]),
+        { provide: ProductService, useValue: { getById: () => ({ subscribe: () => undefined }) } }
+      ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ProductformComponent);
+    fixture = TestBed.createComponent(ProductFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

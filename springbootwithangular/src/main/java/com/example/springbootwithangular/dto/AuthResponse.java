@@ -1,0 +1,4 @@
+package com.example.springbootwithangular.dto;
+
+public record AuthResponse(String token, String email, String role) {
+}

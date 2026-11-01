@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterLink, RouterOutlet],
+  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet],
   template: `
     <div class="app-shell">
       <header class="topbar">
@@ -15,10 +17,19 @@ import { RouterLink, RouterOutlet } from '@angular/router';
             <span class="brand-caption">PRODUCT MANAGEMENT</span>
           </span>
         </a>
-        <div class="topbar-note">
+        <nav class="topbar-actions" aria-label="Account">
+          <a class="nav-link" routerLink="/" routerLinkActive="nav-link-active" [routerLinkActiveOptions]="{ exact: true }">Discover</a>
+          <a *ngIf="auth.isAdmin" class="nav-link admin-link" routerLink="/admin">Admin</a>
+          <ng-container *ngIf="auth.user$ | async as user; else signedOut">
+            <span class="account-email">{{ user.email }}</span>
+            <button class="nav-action" type="button" (click)="auth.logout()">Log out</button>
+          </ng-container>
+          <ng-template #signedOut>
+            <a class="nav-link" routerLink="/login">Log in</a>
+            <a class="nav-cta" routerLink="/register">Sign up</a>
+          </ng-template>
           <span class="status-dot" aria-hidden="true"></span>
-          Your workspace
-        </div>
+        </nav>
       </header>
 
       <main class="page-content">
@@ -34,4 +45,6 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   readonly title = 'product-frontend1';
+
+  constructor(public auth: AuthService) {}
 }

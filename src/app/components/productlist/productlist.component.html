@@ -1,59 +1,103 @@
-<section class="page-heading">
-  <div>
-    <p class="eyebrow">YOUR CATALOG</p>
-    <h1>Products</h1>
-    <p class="page-description">Keep your inventory organized and up to date.</p>
+<section class="shop-hero">
+  <div class="hero-copy">
+    <p class="eyebrow">THE STOCKROOM EDIT</p>
+    <h1>Good finds.<br /><span>Better picks.</span></h1>
+    <p>Discover thoughtful products, then let our smart finder help you find just the right thing.</p>
+    <a class="button button-primary hero-button" href="#catalog">Explore the edit <span aria-hidden="true">↓</span></a>
   </div>
-  <a class="button button-primary" routerLink="/add">
-    <span class="button-icon" aria-hidden="true">+</span>
-    Add product
-  </a>
+  <div class="hero-art" aria-hidden="true">
+    <div class="hero-orbit orbit-one"></div>
+    <div class="hero-orbit orbit-two"></div>
+    <div class="hero-tile tile-back">THE<br />EVERYDAY<br />EDIT</div>
+    <div class="hero-tile tile-front"><span>CURATED FOR YOU</span><strong>Find your<br />next favorite.</strong><i>✳</i></div>
+    <span class="hero-spark spark-one">✳</span>
+    <span class="hero-spark spark-two">✦</span>
+  </div>
 </section>
 
-<section class="surface catalog-card" aria-labelledby="catalog-title">
-  <div class="surface-heading">
-    <div>
-      <h2 id="catalog-title">Product list</h2>
-      <p class="surface-subtitle">A clear view of everything in your catalog.</p>
+<section class="finder-panel" aria-label="Smart product finder">
+  <div class="finder-icon" aria-hidden="true">✳</div>
+  <div class="finder-content">
+    <p class="finder-kicker">SMART FINDER <span>BUILT-IN ASSISTANT</span></p>
+    <h2>Tell us what you’re looking for</h2>
+    <p class="finder-copy">Search naturally—even if you misspell something. We’ll find the closest matches.</p>
+    <form class="search-form" (ngSubmit)="search()">
+      <span class="search-icon" aria-hidden="true">⌕</span>
+      <input
+        type="search"
+        name="query"
+        [(ngModel)]="query"
+        placeholder="Try “comfortable running sneakers”"
+        aria-label="Search products"
+      />
+      <button class="button button-primary" type="submit" [disabled]="loading">
+        {{ loading ? 'Finding…' : 'Find products' }}
+      </button>
+    </form>
+    <div class="suggestion-row">
+      <span>TRY</span>
+      <button type="button" (click)="searchFor('sneakers')">Sneakers</button>
+      <button type="button" (click)="searchFor('everyday bag')">Everyday bag</button>
+      <button type="button" (click)="searchFor('comfortable')">Comfortable</button>
     </div>
-    <span class="item-count">{{ products.length }} {{ products.length === 1 ? 'item' : 'items' }}</span>
-  </div>
-
-  <div class="empty-state" *ngIf="products.length === 0">
-    <span class="empty-icon" aria-hidden="true">▤</span>
-    <h3>Your catalog is ready</h3>
-    <p>Add your first product to start building your inventory.</p>
-    <a class="button button-secondary" routerLink="/add">Create a product</a>
-  </div>
-
-  <div class="table-wrap" *ngIf="products.length > 0">
-    <table class="product-table">
-      <thead>
-        <tr>
-          <th scope="col">Product</th>
-          <th scope="col">Description</th>
-          <th scope="col">Price</th>
-          <th scope="col" class="actions-heading">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let p of products">
-          <td>
-            <div class="product-name">
-              <span class="product-avatar" aria-hidden="true">{{ p.name.charAt(0) || 'P' }}</span>
-              <span>{{ p.name }}</span>
-            </div>
-          </td>
-          <td class="description-cell">{{ p.description }}</td>
-          <td class="price-cell">{{ p.price | currency }}</td>
-          <td class="actions-cell">
-            <button class="button button-quiet" type="button" (click)="editProduct(p.id!)">Edit</button>
-            <button class="button button-danger" type="button" (click)="deleteProduct(p.id!)">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <p class="assistant-message" *ngIf="assistantMessage" aria-live="polite">{{ assistantMessage }}</p>
   </div>
 </section>
 
-<p class="catalog-footnote">Changes to your catalog are saved automatically.</p>
+<section id="catalog" class="catalog-section">
+  <div class="catalog-heading">
+    <div>
+      <p class="eyebrow">{{ query ? 'MATCHES FOR YOUR SEARCH' : 'A LITTLE SOMETHING FOR EVERYONE' }}</p>
+      <h2>{{ query ? 'Your results' : 'The product edit' }}</h2>
+      <p>{{ query ? 'Closest matches, ranked by relevance.' : 'Explore the latest picks from our catalog.' }}</p>
+    </div>
+    <a *ngIf="auth.isAdmin" class="button button-primary" routerLink="/add">
+      <span class="button-icon" aria-hidden="true">+</span> Add product
+    </a>
+  </div>
+
+  <div class="category-row" *ngIf="categories.length > 0">
+    <button type="button" [class.category-active]="selectedCategory === 'All'" (click)="selectCategory('All')">All finds</button>
+    <button
+      type="button"
+      *ngFor="let category of categories"
+      [class.category-active]="selectedCategory === category"
+      (click)="selectCategory(category)"
+    >{{ category }}</button>
+  </div>
+
+  <p *ngIf="errorMessage" class="catalog-error" role="alert">{{ errorMessage }}</p>
+
+  <div class="store-grid" *ngIf="visibleProducts.length > 0">
+    <article class="store-card" *ngFor="let product of visibleProducts">
+      <div class="store-image" [attr.data-category]="product.category || 'Other'">
+        <img *ngIf="product.imageUrl" [src]="product.imageUrl" [alt]="product.name" loading="lazy" />
+        <span *ngIf="!product.imageUrl" class="image-monogram" aria-hidden="true">{{ (product.category || product.name).charAt(0) }}</span>
+        <span class="image-label">{{ product.category || 'Just added' }}</span>
+        <span class="match-label" *ngIf="query">MATCH</span>
+      </div>
+      <div class="store-details">
+        <div class="store-title-row">
+          <div>
+            <p class="store-category">{{ product.category || 'GENERAL' }}</p>
+            <h3>{{ product.name }}</h3>
+          </div>
+          <span class="store-price">{{ product.price | currency }}</span>
+        </div>
+        <p class="store-description">{{ product.description }}</p>
+        <div class="store-actions" *ngIf="auth.isAdmin">
+          <button type="button" class="button button-quiet" (click)="editProduct(product.id!)">Edit</button>
+          <button type="button" class="button button-danger" (click)="deleteProduct(product.id!)">Remove</button>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <div class="store-empty" *ngIf="!loading && !errorMessage && visibleProducts.length === 0">
+    <span class="empty-icon" aria-hidden="true">✳</span>
+    <h3>{{ query ? 'No close matches just yet' : 'The catalog is getting ready' }}</h3>
+    <p>{{ query ? 'Try a different phrase or browse all finds.' : 'Check back soon for fresh finds.' }}</p>
+    <button *ngIf="query" type="button" class="button button-secondary" (click)="clearSearch()">Browse all products</button>
+    <a *ngIf="!query && auth.isAdmin" class="button button-secondary" routerLink="/add">Add the first product</a>
+  </div>
+</section>

@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 import com.example.springbootwithangular.entity.Product;
 @Repository
 public interface ProductRepository extends JpaRepository<Product,Long>{
-
 }

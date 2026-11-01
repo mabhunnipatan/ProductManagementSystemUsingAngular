@@ -12,52 +12,62 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.springbootwithangular.entity.Product;
+import com.example.springbootwithangular.service.ProductRecommendationService;
 import com.example.springbootwithangular.service.ProductService;
 
-
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/products")
-@CrossOrigin(origins = "*") // allow Angular dev server
+@CrossOrigin(origins = "*")
 public class ProductController {
 	private final ProductService service;
-	public ProductController(ProductService service){ this.service = service; }
+	private final ProductRecommendationService recommendationService;
 
+	public ProductController(ProductService service, ProductRecommendationService recommendationService) {
+		this.service = service;
+		this.recommendationService = recommendationService;
+	}
 
 	@GetMapping
-	public List<Product> list(){ return service.findAll(); }
+	public List<Product> list() {
+		return service.findAll();
+	}
 
+	@GetMapping("/recommendations")
+	public List<Product> recommendations(@RequestParam(defaultValue = "") String query) {
+		return recommendationService.recommend(service.findAll(), query);
+	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Product> get(@PathVariable Long id){
-	Product p = service.findById(id);
-	return p == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(p);
+	public ResponseEntity<Product> get(@PathVariable Long id) {
+		Product product = service.findById(id);
+		return product == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(product);
 	}
-
 
 	@PostMapping
-	public ResponseEntity<Product> create(@RequestBody Product product){
-	Product saved = service.save(product);
-	return ResponseEntity.created(URI.create("/api/products/" + saved.getId())).body(saved);
+	public ResponseEntity<Product> create(@Valid @RequestBody Product product) {
+		Product saved = service.save(product);
+		return ResponseEntity.created(URI.create("/api/products/" + saved.getId())).body(saved);
 	}
-
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody Product product){
-	Product existing = service.findById(id);
-	if(existing == null) return ResponseEntity.notFound().build();
-	product.setId(id);
-	Product saved = service.save(product);
-	return ResponseEntity.ok(saved);
+	public ResponseEntity<Product> update(@PathVariable Long id, @Valid @RequestBody Product product) {
+		Product existing = service.findById(id);
+		if (existing == null) {
+			return ResponseEntity.notFound().build();
+		}
+		product.setId(id);
+		return ResponseEntity.ok(service.save(product));
 	}
 
-
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id){
-	service.deleteById(id);
-	return ResponseEntity.noContent().build();
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
+		service.deleteById(id);
+		return ResponseEntity.noContent().build();
 	}
 }

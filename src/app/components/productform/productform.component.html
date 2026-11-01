@@ -59,10 +59,36 @@
       </div>
     </div>
 
+    <div class="form-field">
+      <label for="product-category">Category <span aria-hidden="true">*</span></label>
+      <select id="product-category" [(ngModel)]="product.category" name="category" required>
+        <option value="Clothing">Clothing</option>
+        <option value="Shoes">Shoes</option>
+        <option value="Accessories">Accessories</option>
+        <option value="Home">Home</option>
+        <option value="Beauty">Beauty</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="form-field">
+      <label for="product-image">Product image URL <span class="optional-label">Optional</span></label>
+      <input
+        id="product-image"
+        type="url"
+        [(ngModel)]="product.imageUrl"
+        name="imageUrl"
+        placeholder="https://example.com/product-image.jpg"
+      />
+      <span class="field-help">Use a publicly accessible image URL beginning with https://.</span>
+    </div>
+
+    <p *ngIf="errorMessage" class="form-error" role="alert">{{ errorMessage }}</p>
+
     <div class="form-actions">
       <a class="button button-secondary" routerLink="/">Cancel</a>
-      <button class="button button-primary" type="submit" [disabled]="form.invalid">
-        {{ isEdit ? 'Save changes' : 'Create product' }}
+      <button class="button button-primary" type="submit" [disabled]="form.invalid || saving">
+        {{ saving ? 'Saving…' : (isEdit ? 'Save changes' : 'Create product') }}
       </button>
     </div>
   </form>
