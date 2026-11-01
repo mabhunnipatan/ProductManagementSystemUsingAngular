@@ -1,65 +1,55 @@
-# ProductFrontend1
+# Stockroom
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.15.
+A responsive product catalog built with Angular and Spring Boot. Stockroom provides a simple interface for browsing, adding, editing, and deleting products.
 
-## Development server
+## Live application
 
-To start a local development server, run:
+- **Frontend:** [https://product-frontend1.onrender.com](https://product-frontend1.onrender.com)
+- **Products API:** [https://product-api-xv02.onrender.com/api/products](https://product-api-xv02.onrender.com/api/products)
 
-```bash
-ng serve
-```
+The backend currently uses an in-memory H2 database so it can run without an external database service. Product data is temporary and is lost when the Render service restarts or sleeps.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Features
 
-## Code scaffolding
+- Responsive product catalog with an empty state
+- Add and edit products with required-field validation
+- Delete products with confirmation
+- Currency-formatted prices
+- Angular server-side rendering
+- Spring Boot REST API backed by H2
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Technology
 
-```bash
-ng generate component component-name
-```
+- Angular 19
+- TypeScript
+- Spring Boot 3
+- Spring Data JPA
+- H2 in-memory database
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Run locally
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Deploying to Render
-
-This project includes a Render Blueprint in `render.yaml` for the Angular SSR frontend and Spring Boot API. Create a Blueprint in the [Render Dashboard](https://dashboard.render.com/blueprints), select this repository, and use the repository root as the blueprint path.
-
-The backend currently uses an in-memory H2 database so it can run without an external database service. Data is temporary and is lost whenever the Render service restarts or sleeps. To use persistent data, replace H2 with a publicly reachable database and configure its credentials as Render environment variables. The frontend API base URL is linked automatically to the Render API service. The local default (`http://localhost:8080/api/products`) is only for development.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### Frontend
 
 ```bash
-ng test
+npm ci
+npm start
 ```
 
-## Running end-to-end tests
+Open [http://localhost:4200](http://localhost:4200).
 
-For end-to-end (e2e) testing, run:
+### Backend
 
 ```bash
-ng e2e
+cd springbootwithangular
+mvn spring-boot:run
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+The API runs on [http://localhost:8080/api/products](http://localhost:8080/api/products). The backend uses the same in-memory H2 configuration locally.
 
-## Additional Resources
+## Deploy on Render
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+The repository includes a Render Blueprint in [`render.yaml`](./render.yaml) for the Angular SSR frontend and Spring Boot API. Create a Blueprint in the [Render Dashboard](https://dashboard.render.com/blueprints), select this repository, and use the repository root as the blueprint path.
+
+Render deploys the frontend and backend from the `master` branch. The frontend receives the backend URL from the API service automatically.
+
+For persistent product storage, replace the H2 dependency and configuration with a publicly reachable database, then configure its connection details as environment variables in Render. Do not commit database credentials to the repository.
