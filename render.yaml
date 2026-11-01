@@ -18,12 +18,15 @@ services:
     name: product-frontend1
     runtime: node
     plan: free
-    buildCommand: npm ci && npm run build
+    buildCommand: npm ci --include=dev && npm run build
     startCommand: npm run serve:ssr:product-frontend1
     envVars:
       - key: NODE_ENV
         value: production
       - key: NODE_VERSION
         value: 22.14.0
-      - key: API_URL
-        sync: false
+      - key: API_BASE_URL
+        fromService:
+          type: web
+          name: product-api
+          envVarKey: RENDER_EXTERNAL_URL

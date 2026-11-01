@@ -40,7 +40,7 @@ This will compile your project and store the build artifacts in the `dist/` dire
 
 This project includes a Render Blueprint in `render.yaml` for the Angular SSR frontend and Spring Boot API. Create a Blueprint in the [Render Dashboard](https://dashboard.render.com/blueprints), select this repository, and use the repository root as the blueprint path.
 
-The backend requires an external MySQL database. When Render prompts for `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, and `SPRING_DATASOURCE_PASSWORD`, enter the JDBC URL and credentials for a publicly reachable database. Keep the password in Render's environment settings; do not commit it to the repository. After the API service is created, set the frontend's `API_URL` to its products endpoint, such as `https://product-api.onrender.com/api/products`. The local default (`http://localhost:8080/api/products`) is only for development.
+The backend requires an external MySQL database. When Render prompts for `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, and `SPRING_DATASOURCE_PASSWORD`, enter the JDBC URL and credentials for a publicly reachable database. For Railway, enable Public Access and use a URL in the form `jdbc:mysql://<public-host>:<public-port>/<database>`. Keep the password in Render's environment settings; do not commit it to the repository. The frontend API base URL is linked automatically to the Render API service. The local default (`http://localhost:8080/api/products`) is only for development.
 
 ## Running unit tests
 

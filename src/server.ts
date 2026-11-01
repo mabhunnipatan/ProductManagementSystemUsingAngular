@@ -13,7 +13,10 @@ const browserDistFolder = resolve(serverDistFolder, '../browser');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
-const apiUrl = process.env['API_URL'] ?? 'http://localhost:8080/api/products';
+const apiBaseUrl = process.env['API_BASE_URL']?.replace(/\/+$/, '');
+const apiUrl = apiBaseUrl
+  ? `${apiBaseUrl}/api/products`
+  : process.env['API_URL'] ?? 'http://localhost:8080/api/products';
 
 globalThis.__PRODUCT_API_URL__ = apiUrl;
 
