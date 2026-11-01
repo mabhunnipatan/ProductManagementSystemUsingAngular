@@ -2,6 +2,7 @@ services:
   - type: web
     name: product-api
     runtime: docker
+    plan: free
     dockerfilePath: ./springbootwithangular/Dockerfile
     dockerContext: ./springbootwithangular
     healthCheckPath: /api/products
@@ -16,6 +17,7 @@ services:
   - type: web
     name: product-frontend1
     runtime: node
+    plan: free
     buildCommand: npm ci && npm run build
     startCommand: npm run serve:ssr:product-frontend1
     envVars:
